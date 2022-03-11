@@ -1,6 +1,7 @@
 package com.ironia.springdeliveryapi.api.assembler;
 
 import com.ironia.springdeliveryapi.api.model.EntregaModel;
+import com.ironia.springdeliveryapi.api.model.input.EntregaInput;
 import com.ironia.springdeliveryapi.domain.model.Entrega;
 import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
@@ -23,5 +24,9 @@ public class EntregaAssembler {
         return entregas.stream()
                 .map(this::toModel)
                 .collect(Collectors.toList());
+    }
+
+    public Entrega toEntity(EntregaInput entregaInput) {
+        return modelMapper.map(entregaInput, Entrega.class);
     }
 }

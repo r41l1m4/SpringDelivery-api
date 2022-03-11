@@ -3,6 +3,7 @@ package com.ironia.springdeliveryapi.api.controller;
 import com.ironia.springdeliveryapi.api.assembler.EntregaAssembler;
 import com.ironia.springdeliveryapi.api.model.DestinatarioModel;
 import com.ironia.springdeliveryapi.api.model.EntregaModel;
+import com.ironia.springdeliveryapi.api.model.input.EntregaInput;
 import com.ironia.springdeliveryapi.domain.model.Entrega;
 import com.ironia.springdeliveryapi.domain.repository.EntregaRepository;
 import com.ironia.springdeliveryapi.domain.service.SolicitacaoEntregaService;
@@ -26,8 +27,9 @@ public class EntregaController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public EntregaModel solicitar(@Valid @RequestBody Entrega entrega) {
-        return entregaAssembler.toModel(solicitacaoEntregaService.solicitar(entrega));
+    public EntregaModel solicitar(@Valid @RequestBody EntregaInput entregaInput) {
+        return entregaAssembler
+                .toModel(solicitacaoEntregaService.solicitar(entregaAssembler.toEntity(entregaInput)));
     }
 
     @GetMapping
