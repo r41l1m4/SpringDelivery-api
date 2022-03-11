@@ -1,4 +1,4 @@
-package com.ironia.springdeliveryapi.controller;
+package com.ironia.springdeliveryapi.api.controller;
 
 import com.ironia.springdeliveryapi.domain.model.Cliente;
 import com.ironia.springdeliveryapi.domain.repository.ClienteRepository;

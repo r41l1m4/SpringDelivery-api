@@ -1,9 +1,13 @@
-package com.ironia.springdeliveryapi.controller;
+package com.ironia.springdeliveryapi.api.controller;
 
+import com.ironia.springdeliveryapi.api.assembler.EntregaAssembler;
+import com.ironia.springdeliveryapi.api.model.DestinatarioModel;
+import com.ironia.springdeliveryapi.api.model.EntregaModel;
 import com.ironia.springdeliveryapi.domain.model.Entrega;
 import com.ironia.springdeliveryapi.domain.repository.EntregaRepository;
 import com.ironia.springdeliveryapi.domain.service.SolicitacaoEntregaService;
 import lombok.AllArgsConstructor;
+import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -18,22 +22,23 @@ public class EntregaController {
 
     private EntregaRepository entregaRepository;
     private SolicitacaoEntregaService solicitacaoEntregaService;
+    private EntregaAssembler entregaAssembler;
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public Entrega solicitar(@Valid @RequestBody Entrega entrega) {
-        return solicitacaoEntregaService.solicitar(entrega);
+    public EntregaModel solicitar(@Valid @RequestBody Entrega entrega) {
+        return entregaAssembler.toModel(solicitacaoEntregaService.solicitar(entrega));
     }
 
     @GetMapping
-    public List<Entrega> listar() {
-        return entregaRepository.findAll();
+    public List<EntregaModel> listar() {
+        return entregaAssembler.toCollectionModel(entregaRepository.findAll());
     }
 
     @GetMapping("/{entregaId}")
-    public ResponseEntity<Entrega> buscar(@PathVariable Long entregaId){
+    public ResponseEntity<EntregaModel> buscar(@PathVariable Long entregaId){
         return entregaRepository.findById(entregaId)
-                .map(ResponseEntity::ok)
+                .map(entrega -> ResponseEntity.ok(entregaAssembler.toModel(entrega)))
                 .orElse(ResponseEntity.notFound().build());
     }
 }

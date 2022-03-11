@@ -1,4 +1,4 @@
-package com.ironia.springdeliveryapi.exceptionhandler;
+package com.ironia.springdeliveryapi.api.exceptionhandler;
 
 import com.ironia.springdeliveryapi.domain.exception.NegocioException;
 import lombok.AllArgsConstructor;
