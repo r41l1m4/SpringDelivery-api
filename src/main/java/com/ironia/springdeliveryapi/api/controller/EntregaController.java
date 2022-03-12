@@ -6,6 +6,7 @@ import com.ironia.springdeliveryapi.api.model.EntregaModel;
 import com.ironia.springdeliveryapi.api.model.input.EntregaInput;
 import com.ironia.springdeliveryapi.domain.model.Entrega;
 import com.ironia.springdeliveryapi.domain.repository.EntregaRepository;
+import com.ironia.springdeliveryapi.domain.service.FinalizacaoEntregaService;
 import com.ironia.springdeliveryapi.domain.service.SolicitacaoEntregaService;
 import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
@@ -23,6 +24,7 @@ public class EntregaController {
 
     private EntregaRepository entregaRepository;
     private SolicitacaoEntregaService solicitacaoEntregaService;
+    private FinalizacaoEntregaService finalizacaoEntregaService;
     private EntregaAssembler entregaAssembler;
 
     @PostMapping
@@ -42,5 +44,11 @@ public class EntregaController {
         return entregaRepository.findById(entregaId)
                 .map(entrega -> ResponseEntity.ok(entregaAssembler.toModel(entrega)))
                 .orElse(ResponseEntity.notFound().build());
+    }
+
+    @PutMapping("/{entregaId}/finalizacao")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void finalizar(@PathVariable Long entregaId) {
+        finalizacaoEntregaService.finalizar(entregaId);
     }
 }
