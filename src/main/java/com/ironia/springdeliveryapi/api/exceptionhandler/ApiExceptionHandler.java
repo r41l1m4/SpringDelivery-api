@@ -1,5 +1,6 @@
 package com.ironia.springdeliveryapi.api.exceptionhandler;
 
+import com.ironia.springdeliveryapi.domain.exception.EntidadeNaoEncontradaException;
 import com.ironia.springdeliveryapi.domain.exception.NegocioException;
 import lombok.AllArgsConstructor;
 import org.springframework.context.MessageSource;
@@ -34,6 +35,14 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
                 "Um ou mais campos estão inválidos. Faça o preenchimento correto e tente novamente.", campos);
 
         return handleExceptionInternal(ex, problema, headers, status, request);
+    }
+
+    @ExceptionHandler(EntidadeNaoEncontradaException.class)
+    public ResponseEntity<Object> handleEntidadeNaoEncontrada(EntidadeNaoEncontradaException ex, WebRequest request) {
+        Problema problema = new Problema(HttpStatus.NOT_FOUND.value(), OffsetDateTime.now(),
+                ex.getMessage(), null);
+
+        return handleExceptionInternal(ex, problema, new HttpHeaders(), HttpStatus.NOT_FOUND, request);
     }
 
     @ExceptionHandler(NegocioException.class)
